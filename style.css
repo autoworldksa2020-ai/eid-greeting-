@@ -19,14 +19,19 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 20px;
+  padding: 16px;
   font-family: Arial, sans-serif;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 600px;
 }
 
 .card {
   position: relative;
-  width: 600px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 600px;
 }
 
 .card img {
@@ -68,9 +73,9 @@ body {
 }
 
 .controls {
-  width: 600px;
-  max-width: 100%;
-  margin-top: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 16px;
   background: #fff;
   padding: 16px;
   border-radius: 12px;
@@ -80,18 +85,79 @@ body {
   display: block;
   margin-bottom: 6px;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .controls input,
 .controls select,
 .controls button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
 }
 
 .controls button {
   cursor: pointer;
   border: none;
-  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* تحسين خاص للجوال */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
+
+  .wrapper {
+    max-width: 100%;
+  }
+
+  .card,
+  .controls {
+    max-width: 100%;
+  }
+
+  .controls {
+    padding: 14px;
+    margin-top: 14px;
+  }
+
+  .controls label {
+    font-size: 13px;
+  }
+
+  .controls input,
+  .controls select,
+  .controls button {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
+
+/* تحسين أدق للشاشات الصغيرة جدًا */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .card img {
+    border-radius: 10px;
+  }
+
+  .controls {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .controls input,
+  .controls select,
+  .controls button {
+    padding: 11px;
+    margin-bottom: 12px;
+  }
 }
