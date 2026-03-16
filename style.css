@@ -1,0 +1,97 @@
+@font-face {
+  font-family: 'FFShamelFamily';
+  src: url('./FFShamelFamily.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'CoHeadlineW01';
+  src: url('./CoHeadlineW01.otf') format('opentype');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  position: relative;
+  width: 600px;
+  max-width: 100%;
+}
+
+.card img {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+}
+
+.employee-name {
+  position: absolute;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'FFShamelFamily', sans-serif;
+  font-size: 24px;
+  font-weight: normal;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  pointer-events: none;
+}
+
+.employee-title {
+  position: absolute;
+  bottom: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  text-align: center;
+  color: #ffffff;
+  font-family: 'FFShamelFamily', sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  pointer-events: none;
+}
+
+.controls {
+  width: 600px;
+  max-width: 100%;
+  margin-top: 20px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.controls label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.controls input,
+.controls select,
+.controls button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 14px;
+}
+
+.controls button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+}

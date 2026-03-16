@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بطاقة تهنئة العيد - Auto World</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div>
+    <div class="card" id="card">
+      <img src="template.png.png" alt="Eid Card" id="cardImage" />
+      <div class="employee-name" id="nameText">اسم الموظف</div>
+      <div class="employee-title" id="titleText">المسمى الوظيفي</div>
+    </div>
+
+    <div class="controls">
+      <label for="nameInput">اسم الموظف</label>
+      <input type="text" id="nameInput" value="اسم الموظف" />
+
+      <label for="titleInput">المسمى الوظيفي</label>
+      <input type="text" id="titleInput" value="المسمى الوظيفي" />
+
+      <label for="fontSelect">نوع الخط</label>
+      <select id="fontSelect">
+        <option value="FFShamelFamily">FFShamelFamily</option>
+        <option value="CoHeadlineW01">CoHeadlineW01</option>
+      </select>
+
+      <label for="fontSize">حجم خط الاسم</label>
+      <select id="fontSize">
+        <option value="12">12</option>
+        <option value="18">18</option>
+        <option value="20">20</option>
+        <option value="24" selected>24</option>
+        <option value="28">28</option>
+      </select>
+
+      <label for="titleFontSize">حجم خط المسمى الوظيفي</label>
+      <select id="titleFontSize">
+        <option value="12">12</option>
+        <option value="18" selected>18</option>
+        <option value="20">20</option>
+        <option value="24">24</option>
+        <option value="28">28</option>
+      </select>
+
+      <label for="fontColor">لون الخط</label>
+      <select id="fontColor">
+        <option value="#ffffff" selected>أبيض</option>
+        <option value="#000000">أسود</option>
+      </select>
+
+      <label for="nameBottom">مكان الاسم من الأسفل</label>
+      <input type="range" id="nameBottom" min="20" max="180" value="70" />
+
+      <br><br>
+
+      <button type="button" id="downloadBtn">تحميل البطاقة</button>
+    </div>
+  </div>
+
+  <script>
+    const nameInput = document.getElementById("nameInput");
+    const titleInput = document.getElementById("titleInput");
+    const nameText = document.getElementById("nameText");
+    const titleText = document.getElementById("titleText");
+    const fontSelect = document.getElementById("fontSelect");
+    const fontSize = document.getElementById("fontSize");
+    const titleFontSize = document.getElementById("titleFontSize");
+    const fontColor = document.getElementById("fontColor");
+    const nameBottom = document.getElementById("nameBottom");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const cardImage = document.getElementById("cardImage");
+    const card = document.getElementById("card");
+
+    function updateCard() {
+      nameText.textContent = nameInput.value || "اسم الموظف";
+      titleText.textContent = titleInput.value || "المسمى الوظيفي";
+
+      nameText.style.fontFamily = `'${fontSelect.value}', sans-serif`;
+      nameText.style.fontSize = fontSize.value + "px";
+      nameText.style.color = fontColor.value;
+      nameText.style.bottom = nameBottom.value + "px";
+
+      titleText.style.fontFamily = `'${fontSelect.value}', sans-serif`;
+      titleText.style.fontSize = titleFontSize.value + "px";
+      titleText.style.color = fontColor.value;
+      titleText.style.bottom = (parseInt(nameBottom.value, 10) - (parseInt(titleFontSize.value, 10) + 10)) + "px";
+    }
+
+    nameInput.addEventListener("input", updateCard);
+    titleInput.addEventListener("input", updateCard);
+    fontSelect.addEventListener("change", updateCard);
+    fontSize.addEventListener("change", updateCard);
+    titleFontSize.addEventListener("change", updateCard);
+    fontColor.addEventListener("change", updateCard);
+    nameBottom.addEventListener("input", updateCard);
+
+    updateCard();
+
+    async function ensureImageLoaded(img) {
+      if (img.complete && img.naturalWidth > 0) return;
+      await new Promise((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error("Image failed to load"));
+      });
+    }
+
+    async function ensureFontsLoaded() {
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+    }
+
+    function drawCenteredText(ctx, text, x, y, fontSizePx, fontFamily, color) {
+      ctx.save();
+      ctx.fillStyle = color;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
+      ctx.direction = "rtl";
+      ctx.font = `${fontSizePx}px "${fontFamily}"`;
+      ctx.fillText(text, x, y);
+      ctx.restore();
+    }
+
+    async function downloadCard() {
+      await ensureImageLoaded(cardImage);
+      await ensureFontsLoaded();
+
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const imgWidth = cardImage.naturalWidth;
+      const imgHeight = cardImage.naturalHeight;
+
+      canvas.width = imgWidth;
+      canvas.height = imgHeight;
+
+      ctx.drawImage(cardImage, 0, 0, imgWidth, imgHeight);
+
+      const displayedCardWidth = card.clientWidth;
+      const scaleRatio = imgWidth / displayedCardWidth;
+
+      const centerX = imgWidth / 2;
+
+      const previewNameBottom = parseInt(nameBottom.value, 10);
+      const previewNameFontSize = parseInt(fontSize.value, 10);
+      const previewTitleFontSize = parseInt(titleFontSize.value, 10);
+
+      const nameBottomPx = previewNameBottom * scaleRatio;
+      const nameFontSizePx = previewNameFontSize * scaleRatio;
+      const titleFontSizePx = previewTitleFontSize * scaleRatio;
+
+      const nameY = imgHeight - nameBottomPx;
+      const titleGap = (previewTitleFontSize + 10) * scaleRatio;
+      const titleY = imgHeight - (previewNameBottom - (previewTitleFontSize + 10)) * scaleRatio;
+
+      drawCenteredText(
+        ctx,
+        nameInput.value || "اسم الموظف",
+        centerX,
+        nameY,
+        nameFontSizePx,
+        fontSelect.value,
+        fontColor.value
+      );
+
+      drawCenteredText(
+        ctx,
+        titleInput.value || "المسمى الوظيفي",
+        centerX,
+        titleY,
+        titleFontSizePx,
+        fontSelect.value,
+        fontColor.value
+      );
+
+      const link = document.createElement("a");
+      link.download = "AutoWorld-Eid-Card.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    downloadBtn.addEventListener("click", downloadCard);
+  </script>
+
+</body>
+</html>
